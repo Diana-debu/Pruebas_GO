@@ -1,0 +1,5 @@
+En este folder el principal archivo (el code py para crear las arcillas con o sin agua en el espacio intercapa) es el llamado "data_lammps_sodio_3.py". Este code está modificado a partir de lo reportado en https://doi.org/10.1016/j.gca.2023.07.024. Algunas explicaciones mías se encuentran en aquellos comentarios que ininian con "# ODOG". Los demás archivos en este folder están relacionados con tal code.
+
+Básicamente, el .py toma la estructura de la pirol¡filita de referencia "pyro_xyz.txt", hace algunas modificaciones para convertirla a Montmorillonita tipo Wyoming, y finalmente incluye tanto agua (h2o.xyz) como cationes intercambiables (na.xyz) en el espacio intercapa.
+
+La dinámica para incluir el grafeno en el sistema es algo similar, solo que en lugar que basarse en la pirofilita sola, se basa en una estructura de la pirofilita que ya tiene una hoja de grafeno superpuesta. Es decir, cambia el archivo "pyro_xyz.txt" por uno que ya tenga el grafeno puesto. Un ejemplo de esto lo podrás encontrar en la carpeta "Clay_water_Gr".

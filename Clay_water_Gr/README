@@ -1,0 +1,11 @@
+Antes de leer este README, lee el que está en la carpeta "Clay_and_water".
+
+En esta carpeta podras encontrar un ejemplo de aramado de estructura de arcilla con grafeno. La dinámica es similar a la mencionada anteriormente, solo que acá si te das cuenta, el archivo "pyro_xyz.txt" ya contiene el grafeno.
+
+Los demás archivos (lo nuevo con respecto al folder "Clay_and_water") están relacionados al postprocessing del output. De igual forma revisarlos no estaría mal.
+
+Por cierto, esta muestra está seca. Si quieres agregar agua, sigue el ejemplo de "Clay_and_water/Wet/".
+
+Por último, si tu pregunta es cómo creé ña estructura Clay-Graphene, entonces para eso usé el código "Cellmatch" (https://doi.org/10.1016/j.cpc.2015.08.038). El paper pdf, el material de suplementario de este, y mis intentos haciendo eso, se encuentran en la carpeta llamada "Cellmatch_Clay_Gr".
+
+
