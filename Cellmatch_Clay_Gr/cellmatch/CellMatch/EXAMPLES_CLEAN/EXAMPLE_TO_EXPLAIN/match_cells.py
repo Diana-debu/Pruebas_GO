@@ -44,57 +44,56 @@ def cartesian_to_direct(cartesian_xyz,v1,v2,v3):
 
 
 def make_direct(atom_coords,v1,v2,v3):
-     coords_direct=[]
-     for i in range(len(atom_coords)):
-	     #print atom_coords[i][0:3]
-	     c1,c2,c3=cartesian_to_direct(atom_coords[i][0:3],v1,v2,v3)
-	     if len(atom_coords[i])>3:
-		     f1,f2,f3=atom_coords[i][3:6]
-		     coords_direct.append([c1,c2,c3,f1,f2,f3])
-	     else:
-		     coords_direct.append([c1,c2,c3])
-     return coords_direct
+    coords_direct=[]
+    for i in range(len(atom_coords)):
+        #print(atom_coords[i][0:3])
+        c1,c2,c3=cartesian_to_direct(atom_coords[i][0:3],v1,v2,v3)
+        if len(atom_coords[i])>3:
+            f1,f2,f3=atom_coords[i][3:6]
+            coords_direct.append([c1,c2,c3,f1,f2,f3])
+        else:
+            coords_direct.append([c1,c2,c3])
+    return coords_direct
 
 def calculate_strain(a1,b1,c1,a2,b2,c2):
-	a1x,a1y,a1z=a1
- 	b1x,b1y,b1z=b1
-	c1x,c1y,c1z=c1
-	# 
-	a2x,a2y,a2z=a2
- 	b2x,b2y,b2z=b2
-	c2x,c2y,c2z=c2
-        #
-	# we put c2z and c1z here to 1.0 just to be sure, just in case the user used different z dimensions
-        c1z=1.0
-	c2z=1.0
-	metric_tensor1=np.matrix([[a1x**2+a1y**2+a1z**2,a1x*b1x+a1y*b1y+a1z*b1z,a1x*c1x+a1y*c1y+a1z*c1z],[a1x*b1x+a1y*b1y+a1z*b1z,b1x**2+b1y**2+b1z**2,b1x*c1x+b1y*c1y+b1z*c1z],[a1x*c1x+a1y*c1y+a1z*c1z,c1x*b1x+c1y*b1y+c1z*b1z,c1x**2+c1y**2+c1z**2]])
-	metric_tensor2=np.matrix([[a2x**2+a2y**2+a2z**2,a2x*b2x+a2y*b2y+a2z*b2z,a2x*c2x+a2y*c2y+a2z*c2z],[a2x*b2x+a2y*b2y+a2z*b2z,b2x**2+b2y**2+b2z**2,b2x*c2x+b2y*c2y+b2z*c2z],[a2x*c2x+a2y*c2y+a2z*c2z,c2x*b2x+c2y*b2y+c2z*b2z,c2x**2+c2y**2+c2z**2]])
-	
-	
-	rt1=np.linalg.cholesky(metric_tensor1).transpose()
-	rt2=np.linalg.cholesky(metric_tensor2).transpose()
-	
-	unit_matrix=np.matrix([[1,0,0],[0,1,0],[0,0,1]])
-	
-	evec=rt2*rt1.getI()-unit_matrix
-	
-	strain1=0.5*(evec+evec.transpose())
-	
-	strain2=0.5*(evec+evec.transpose()+evec*evec.transpose())
-	
-	#print "linear lagrangian tensor"
-	#str1,str2,str3=np.linalg.eig(strain1)[0]
-	#deformation=sqrt(str1**2+str2**2+str3**2)/3.
-	#print "eigenvalues ",str1,str2,str3
-	#print 'deformation',deformation
-	
-	#print "finite lagrangian tensor"
-	str1,str2,str3=np.linalg.eig(strain2)[0]
-	deformation=sqrt(str1**2+str2**2+str3**2)/3.
-	#print "eigenvalues ",str1,str2,str3
-	#print 'deformation',deformation
-	
-        return deformation
+    a1x,a1y,a1z=a1
+    b1x,b1y,b1z=b1
+    c1x,c1y,c1z=c1
+    # 
+    a2x,a2y,a2z=a2
+    b2x,b2y,b2z=b2
+    c2x,c2y,c2z=c2
+    #
+    # we put c2z and c1z here to 1.0 just to be sure, just in case the user used different z dimensions
+    c1z=1.0
+    c2z=1.0
+    metric_tensor1=np.matrix([[a1x**2+a1y**2+a1z**2,a1x*b1x+a1y*b1y+a1z*b1z,a1x*c1x+a1y*c1y+a1z*c1z],[a1x*b1x+a1y*b1y+a1z*b1z,b1x**2+b1y**2+b1z**2,b1x*c1x+b1y*c1y+b1z*c1z],[a1x*c1x+a1y*c1y+a1z*c1z,c1x*b1x+c1y*b1y+c1z*b1z,c1x**2+c1y**2+c1z**2]])
+    metric_tensor2=np.matrix([[a2x**2+a2y**2+a2z**2,a2x*b2x+a2y*b2y+a2z*b2z,a2x*c2x+a2y*c2y+a2z*c2z],[a2x*b2x+a2y*b2y+a2z*b2z,b2x**2+b2y**2+b2z**2,b2x*c2x+b2y*c2y+b2z*c2z],[a2x*c2x+a2y*c2y+a2z*c2z,c2x*b2x+c2y*b2y+c2z*b2z,c2x**2+c2y**2+c2z**2]])
+
+    rt1=np.linalg.cholesky(metric_tensor1).transpose()
+    rt2=np.linalg.cholesky(metric_tensor2).transpose()
+
+    unit_matrix=np.matrix([[1,0,0],[0,1,0],[0,0,1]])
+
+    evec=rt2*rt1.getI()-unit_matrix
+
+    strain1=0.5*(evec+evec.transpose())
+
+    strain2=0.5*(evec+evec.transpose()+evec*evec.transpose())
+
+    #print("linear lagrangian tensor")
+    #str1,str2,str3=np.linalg.eig(strain1)[0]
+    #deformation=sqrt(str1**2+str2**2+str3**2)/3.
+    #print("eigenvalues ",str1,str2,str3)
+    #print('deformation',deformation)
+
+    #print("finite lagrangian tensor")
+    str1,str2,str3=np.linalg.eig(strain2)[0]
+    deformation=sqrt(str1**2+str2**2+str3**2)/3.
+    #print("eigenvalues ",str1,str2,str3)
+    #print('deformation',deformation)
+
+    return deformation
 
 def write_file(name,a1x,a1y,a1z,a2x,a2y,a2z,a3x,a3y,a3z,atoms_x,selective_dynamics,chemical_symbols,atoms_coords_direct,comment):
     fl=open(name,'w')
@@ -108,26 +107,26 @@ def write_file(name,a1x,a1y,a1z,a2x,a2y,a2z,a3x,a3y,a3z,atoms_x,selective_dynami
     t='  {:> 21.16f} {:> 21.16f} {:> 21.16f}'.format(a3x,a3y,a3z)+'\n'
     fl.write(t)
     t='   '
-    if chemical_symbols<>-1:
-       for i in range(len(chemical_symbols)):
-	       t+=chemical_symbols[i]+'   '
-       t+=' \n'
-       fl.write(t)
+    if chemical_symbols!=-1:
+        for i in range(len(chemical_symbols)):
+            t+=chemical_symbols[i]+'   '
+        t+=' \n'
+        fl.write(t)
     t='     '
     for i in range(len(atoms_x)):
-	t+=str(atoms_x[i])+'   '
+        t+=str(atoms_x[i])+'   '
     t+=' \n'
     fl.write(t)
     if selective_dynamics:
-       fl.write('Selective Dynamics\n')
+        fl.write('Selective Dynamics\n')
     fl.write('Direct\n')
     for i in range(len(atoms_coords_direct)):
-	t=' {:> 19.16f} {:> 19.16f} {:> 19.16f}'.format(atoms_coords_direct[i][0],atoms_coords_direct[i][1],atoms_coords_direct[i][2])
-	if len(atoms_coords_direct[i])>3:
-	   for j in range(3,6):
-	       t+=' '+atoms_coords_direct[i][j]
-	t+='  \n'
-	fl.write(t)
+        t=' {:> 19.16f} {:> 19.16f} {:> 19.16f}'.format(atoms_coords_direct[i][0],atoms_coords_direct[i][1],atoms_coords_direct[i][2])
+        if len(atoms_coords_direct[i])>3:
+            for j in range(3,6):
+                t+=' '+atoms_coords_direct[i][j]
+        t+='  \n'
+        fl.write(t)
     fl.close()
 
 
@@ -135,67 +134,67 @@ def write_file(name,a1x,a1y,a1z,a2x,a2y,a2z,a3x,a3y,a3z,atoms_x,selective_dynami
 
 
 def analyze_file(filename):
-      fl=open(filename,'r')
-      tx=fl.readlines()
-      fl.close()
-      # we follow VASP file structure, first line is a comment
-      # second line is a scaling factor or volume (if negative)
-      # volume feature not supported
-      comment=tx[0]
-      scale=float(tx[1].split()[0])
-      ax,ay,az=floatize_scale(tx[2].split(),scale)
-      bx,by,bz=floatize_scale(tx[3].split(),scale)
-      cx,cy,cz=floatize_scale(tx[4].split(),scale)
-      try:
-	  atoms_t=int(tx[5].split()[0])
-	  atoms_x=integerize(tx[5].split())
-	  chemsymbols=-1
-	  if tx[6][0] in ['s','S']:
-	     start=8
-	     selective_dynamics=True
-	     if tx[7][0] in ['D','d']:
-		     type_of_coordinates='Direct'
-	     else:
-		     type_of_coordinates='Cartesian'
-	  else:
-	     selective_dynamics=False
-	     start=7
-	     if tx[6][0] in ['D','d']:
-		     type_of_coordinates='Direct'
-	     else:
-		     type_of_coordinates='Cartesian'
+    fl=open(filename,'r')
+    tx=fl.readlines()
+    fl.close()
+    # we follow VASP file structure, first line is a comment
+    # second line is a scaling factor or volume (if negative)
+    # volume feature not supported
+    comment=tx[0]
+    scale=float(tx[1].split()[0])
+    ax,ay,az=floatize_scale(tx[2].split(),scale)
+    bx,by,bz=floatize_scale(tx[3].split(),scale)
+    cx,cy,cz=floatize_scale(tx[4].split(),scale)
+    try:
+        atoms_t=int(tx[5].split()[0])
+        atoms_x=integerize(tx[5].split())
+        chemsymbols=-1
+        if tx[6][0] in ['s','S']:
+            start=8
+            selective_dynamics=True
+            if tx[7][0] in ['D','d']:
+                type_of_coordinates='Direct'
+            else:
+                type_of_coordinates='Cartesian'
+        else:
+            selective_dynamics=False
+            start=7
+            if tx[6][0] in ['D','d']:
+                type_of_coordinates='Direct'
+            else:
+                type_of_coordinates='Cartesian'
 
-      except:
-	  chemsymbols=tx[5].split()
-	  atoms_x=integerize(tx[6].split())
-	  if tx[7][0] in ['s','S']:
-	     selective_dynamics=True
-	     start=9
-	     if tx[8][0] in ['D','d']:
-		     type_of_coordinates='Direct'
-	     else:
-		     type_of_coordinates='Cartesian'
-	  else:
-	     selective_dynamics=False
-	     start=8
-	     if tx[7][0] in ['D','d']:
-		     type_of_coordinates='Direct'
-	     else:
-		     type_of_coordinates='Cartesian'
-      atoms=0
-      for p in atoms_x:
-	  atoms+=p
+    except:
+        chemsymbols=tx[5].split()
+        atoms_x=integerize(tx[6].split())
+        if tx[7][0] in ['s','S']:
+            selective_dynamics=True
+            start=9
+            if tx[8][0] in ['D','d']:
+                type_of_coordinates='Direct'
+            else:
+                type_of_coordinates='Cartesian'
+        else:
+            selective_dynamics=False
+            start=8
+            if tx[7][0] in ['D','d']:
+                type_of_coordinates='Direct'
+            else:
+                type_of_coordinates='Cartesian'
+    atoms=0
+    for p in atoms_x:
+        atoms+=p
 
-      atomic_coordinates=[]
-      for i in range(atoms):
-	  a,b,c=floatize(tx[start+i].split()[0:3])
-	  if selective_dynamics:
-		  f1,f2,f3=tx[start+i].split()[3:6]
-	  	  atomic_coordinates.append([a,b,c,f1,f2,f3])
-	  else:
-	  	  atomic_coordinates.append([a,b,c])
+    atomic_coordinates=[]
+    for i in range(atoms):
+        a,b,c=floatize(tx[start+i].split()[0:3])
+        if selective_dynamics:
+            f1,f2,f3=tx[start+i].split()[3:6]
+            atomic_coordinates.append([a,b,c,f1,f2,f3])
+        else:
+            atomic_coordinates.append([a,b,c])
 
-      return ax,ay,az,bx,by,bz,cx,cy,cz,atoms_x,atoms,selective_dynamics,type_of_coordinates,chemsymbols,atomic_coordinates,comment
+    return ax,ay,az,bx,by,bz,cx,cy,cz,atoms_x,atoms,selective_dynamics,type_of_coordinates,chemsymbols,atomic_coordinates,comment
 
 
 parser = argparse.ArgumentParser()
@@ -241,8 +240,8 @@ linear_tolerance = args.tolerance
 show_percent = args.show_progress
 output_file = args.output
 
-print file1,file2,nindex
-print "Trying to find common cell for unit cells from files ",file1," and ",file2
+print (file1,file2,nindex)
+print ("Trying to find common cell for unit cells from files ",file1," and ",file2)
 
 # in principle your unit cell should be orthogonal so that c is perpendicular to the a-b plane
 
@@ -307,30 +306,30 @@ relative_distances = []
 total_numbers = (2*nindex+1)**4
 counter = 0
 
-print "Searching for coincident points."
+print ("Searching for coincident points.")
 for i1 in range(-nindex,nindex+1):
-  for i2 in range(-nindex,nindex+1): 
-    if abs(i1) + abs(i2) <>0:
-       for j1 in range(-nindex,nindex+1):
-	 for j2 in range(-nindex,nindex+1):
-	    if abs(j1) + abs(j2) <>0:
-		    counter += 1
-		    v1x = a1x*i1 + a2x*i2
-		    v1y = a1y*i1 + a2y*i2
-		    v2x = b1x*j1 + b2x*j2
-		    v2y = b1y*j1 + b2y*j2
-		    epsilon = sqrt((v1x-v2x)**2+(v1y-v2y)**2)
-		    distances.append([epsilon,[i1,i2,j1,j2]])
-		    relative_distances.append([epsilon/(sqrt(v1x**2+v1y**2)+sqrt(v2x**2+v2y**2)),[i1,i2,j1,j2]])
-		    percent = counter/float(total_numbers)*100
-	  	    if show_percent == 1:
-		    	sys.stdout.write("\r%d%%" %percent)
-		    	sys.stdout.flush()
+    for i2 in range(-nindex,nindex+1): 
+        if abs(i1) + abs(i2) !=0:
+            for j1 in range(-nindex,nindex+1):
+                for j2 in range(-nindex,nindex+1):
+                    if abs(j1) + abs(j2) !=0:
+                        counter += 1
+                        v1x = a1x*i1 + a2x*i2
+                        v1y = a1y*i1 + a2y*i2
+                        v2x = b1x*j1 + b2x*j2
+                        v2y = b1y*j1 + b2y*j2
+                        epsilon = sqrt((v1x-v2x)**2+(v1y-v2y)**2)
+                        distances.append([epsilon,[i1,i2,j1,j2]])
+                        relative_distances.append([epsilon/(sqrt(v1x**2+v1y**2)+sqrt(v2x**2+v2y**2)),[i1,i2,j1,j2]])
+                        percent = counter/float(total_numbers)*100
+                        if show_percent == 1:
+                            sys.stdout.write("\r%d%%" %percent)
+                            sys.stdout.flush()
 
 if show_percent == 1:
-	sys.stdout.write("\r%d%%" %100)
-	sys.stdout.flush()
-print " Done!"
+    sys.stdout.write("\r%d%%" %100)
+    sys.stdout.flush()
+print (" Done!")
 
 relative_distances.sort()
 
@@ -341,70 +340,70 @@ po_povrsini_unique = []
 found = 0
 k = 0
 while found == 0:
-	if relative_distances[k][0] > linear_tolerance:
-		found = 1
-	else:
-		k += 1
+    if relative_distances[k][0] > linear_tolerance:
+        found = 1
+    else:
+        k += 1
 
-print "Found ",k," vector candidates to build cells."
+print ("Found ",k," vector candidates to build cells.")
 
 # this is the definition of "zero"
 zero_tolerance=0.1
 
-print "Now searching for common cells within the selected vector combinations."
+print ("Now searching for common cells within the selected vector combinations.")
 
 total = (k**2)/2.
 
 counter = 0
 for i in range(k):
     for j in range(i,k):
-	  omjer1 = 0
-	  omjer2 = 0
-	  eps1, iovi1 = relative_distances[i]
-	  i11, i12, j11, j12 = iovi1
-	  eps2, iovi2 = relative_distances[j]
-	  i21, i22, j21, j22 = iovi2
-	  v1x = a1x*i11 + a2x*i12
-	  v1y = a1y*i11 + a2y*i12
-	  v2x = a1x*i21 + a2x*i22
-	  v2y = a1y*i21 + a2y*i22
-	  if v1x*v2y - v1y*v2x <> 0:
-		  omjer1 = round(abs((v1x*v2y-v1y*v2x)/(a1x*a2y-a1y*a2x)))
+        omjer1 = 0
+        omjer2 = 0
+        eps1, iovi1 = relative_distances[i]
+        i11, i12, j11, j12 = iovi1
+        eps2, iovi2 = relative_distances[j]
+        i21, i22, j21, j22 = iovi2
+        v1x = a1x*i11 + a2x*i12
+        v1y = a1y*i11 + a2y*i12
+        v2x = a1x*i21 + a2x*i22
+        v2y = a1y*i21 + a2y*i22
+        if v1x*v2y - v1y*v2x != 0:
+            omjer1 = round(abs((v1x*v2y-v1y*v2x)/(a1x*a2y-a1y*a2x)))
 
-	  g1x = b1x*j11 + b2x*j12
-	  g1y = b1y*j11 + b2y*j12
-	  g2x = b1x*j21 + b2x*j22
-	  g2y = b1y*j21 + b2y*j22
+        g1x = b1x*j11 + b2x*j12
+        g1y = b1y*j11 + b2y*j12
+        g2x = b1x*j21 + b2x*j22
+        g2y = b1y*j21 + b2y*j22
 
-	  if g1x*g2y - g1y*g2x<>0:
-		  omjer2 = round(abs((g1x*g2y-g1y*g2x)/(b1x*b2y-b1y*b2x)))
+        if g1x*g2y - g1y*g2x!=0:
+            omjer2 = round(abs((g1x*g2y-g1y*g2x)/(b1x*b2y-b1y*b2x)))
 
-	  if omjer1 > zero_tolerance and omjer2 > zero_tolerance:
-		  surf1 = abs(v1x*v2y-v1y*v2x)
-		  surf2 = abs(g1x*g2y-g1y*g2x)
-		  strain = calculate_strain([v1x,v1y,0],[v2x,v2y,0],[0,0,1],[g1x,g1y,0],[g2x,g2y,0],[0,0,1])
-		  total_atoms = round(atoms1*omjer1 + atoms2*omjer2)
-		  length = sqrt(v1x**2+v1y**2)*sqrt(v2x**2+v2y**2)
-		  po_povrsini.append([strain, [omjer1, omjer2, length, total_atoms, [iovi1,iovi2], eps1, eps2]])
+        if omjer1 > zero_tolerance and omjer2 > zero_tolerance:
+            surf1 = abs(v1x*v2y-v1y*v2x)
+            surf2 = abs(g1x*g2y-g1y*g2x)
+            strain = calculate_strain([v1x,v1y,0],[v2x,v2y,0],[0,0,1],[g1x,g1y,0],[g2x,g2y,0],[0,0,1])
+            total_atoms = round(atoms1*omjer1 + atoms2*omjer2)
+            length = sqrt(v1x**2+v1y**2)*sqrt(v2x**2+v2y**2)
+            po_povrsini.append([strain, [omjer1, omjer2, length, total_atoms, [iovi1,iovi2], eps1, eps2]])
 
-	  counter += 1
-	  percent = counter/float(total)*100
-	  if show_percent == 1:
-	  	sys.stdout.write("\r%d%%" %percent)
-	  	sys.stdout.flush()
+        counter += 1
+        percent = counter/float(total)*100
+        if show_percent == 1:
+            sys.stdout.write("\r%d%%" %percent)
+            sys.stdout.flush()
 
 if show_percent == 1:
-   sys.stdout.write("\r%d%%" %100)
-   sys.stdout.flush()
+    sys.stdout.write("\r%d%%" %100)
+    sys.stdout.flush()
 
-print " Done"
+print (" Done")
 
 # now sorting by the strain 
 
 po_povrsini.sort()
 
-print "Found  ",len(po_povrsini)," candidates for the new common cell."
-print "Analyzing....."
+print ("Found  ",len(po_povrsini)," candidates for the new common cell.")
+print ("Analyzing.....")
 
 po_povrsini_unique_strain = []
 
@@ -415,59 +414,59 @@ tolerance_strain = 1e-4
 tolerance_ratio = 1e-5
 
 for i in range(len(po_povrsini)):
-	percent = i/float(len(po_povrsini))*100
-	if show_percent == 1:
-	      sys.stdout.write("\r%d%%" %percent )
-	      sys.stdout.flush()
+    percent = i/float(len(po_povrsini))*100
+    if show_percent == 1:
+        sys.stdout.write("\r%d%%" %percent )
+        sys.stdout.flush()
 
-	strain = po_povrsini[i][0]
-	omjer1 = po_povrsini[i][1][0]
-	omjer2 = po_povrsini[i][1][1]
-	length = po_povrsini[i][1][2]
-	found = 0
-	if check_for_unique <> 0:
-		for j in range(len(po_povrsini_unique_strain)):
-			strain_in = po_povrsini_unique_strain[j][0]
-			omjer1_in, omjer2_in, length_in = po_povrsini_unique_strain[j][1]
-			if abs(strain - strain_in) < tolerance_strain and abs(omjer1/omjer2 -omjer1_in/omjer2_in) < tolerance_ratio:
-				found = 1
-	if found == 0:
-	    # now we are going to add it - but moreover - we shall add the one with the smallest surface, and smallest length of unit cell vectors!
-	    najmanji_index = i
-	    najmanji_omjer = omjer1
-	    najmanji_length = length
-	    brojalnik = i+1
-	    exit = 0
-	    while exit == 0 and brojalnik < len(po_povrsini) and check_for_unique == 1:
-		    k = brojalnik
-		    strain_in = po_povrsini[k][0]
-		    omjer1_in, omjer2_in, length_in = po_povrsini[k][1][0:3]
-		    if abs(strain - strain_in) < tolerance_strain and abs(omjer1/omjer2 - omjer1_in/omjer2_in) < tolerance_ratio:
-			  # identical strain and surface ratio - now we are checking for length
-			  if length_in < najmanji_length:
-				  najmanji_index = k
-				  najmanji_length = length_in
-		    brojalnik += 1
-		    # since they are sorted by strain - after this is satisfied we don't have to search any further
-		    if strain_in > strain + tolerance_strain:
-			    exit = 1
-	    po_povrsini_unique_strain.append([po_povrsini[najmanji_index][0], po_povrsini[najmanji_index][1][0:3]])
-	    po_povrsini_unique.append(po_povrsini[najmanji_index])
+    strain = po_povrsini[i][0]
+    omjer1 = po_povrsini[i][1][0]
+    omjer2 = po_povrsini[i][1][1]
+    length = po_povrsini[i][1][2]
+    found = 0
+    if check_for_unique != 0:
+        for j in range(len(po_povrsini_unique_strain)):
+            strain_in = po_povrsini_unique_strain[j][0]
+            omjer1_in, omjer2_in, length_in = po_povrsini_unique_strain[j][1]
+            if abs(strain - strain_in) < tolerance_strain and abs(omjer1/omjer2 -omjer1_in/omjer2_in) < tolerance_ratio:
+                found = 1
+    if found == 0:
+        # now we are going to add it - but moreover - we shall add the one with the smallest surface, and smallest length of unit cell vectors!
+        najmanji_index = i
+        najmanji_omjer = omjer1
+        najmanji_length = length
+        brojalnik = i+1
+        exit = 0
+        while exit == 0 and brojalnik < len(po_povrsini) and check_for_unique == 1:
+            k = brojalnik
+            strain_in = po_povrsini[k][0]
+            omjer1_in, omjer2_in, length_in = po_povrsini[k][1][0:3]
+            if abs(strain - strain_in) < tolerance_strain and abs(omjer1/omjer2 - omjer1_in/omjer2_in) < tolerance_ratio:
+                # identical strain and surface ratio - now we are checking for length
+                if length_in < najmanji_length:
+                    najmanji_index = k
+                    najmanji_length = length_in
+            brojalnik += 1
+            # since they are sorted by strain - after this is satisfied we don't have to search any further
+            if strain_in > strain + tolerance_strain:
+                exit = 1
+        po_povrsini_unique_strain.append([po_povrsini[najmanji_index][0], po_povrsini[najmanji_index][1][0:3]])
+        po_povrsini_unique.append(po_povrsini[najmanji_index])
 
 if show_percent == 1:
-	sys.stdout.write("\r%d%%" %100 )
-	sys.stdout.flush()
+    sys.stdout.write("\r%d%%" %100 )
+    sys.stdout.flush()
 
-print " Done."
+print (" Done.")
 
-print "Writing results in the file : ",output_file
+print ("Writing results in the file : ",output_file)
 
 fl=open(output_file,'w')
 
-print "------------------------------------------------------- RESULTS ---------------------------------------------"
-print "-------------------------------------------------------------------------------------------------------------"
-print "|  index  |       strain       |    atoms  |  surf_ratio  |         indices1      |         indices2        |" 
-print "-------------------------------------------------------------------------------------------------------------"
+print ("------------------------------------------------------- RESULTS ---------------------------------------------")
+print ("-------------------------------------------------------------------------------------------------------------")
+print ("|  index  |       strain       |    atoms  |  surf_ratio  |         indices1      |         indices2        |") 
+print ("-------------------------------------------------------------------------------------------------------------")
 
 t=name1+'      '+name2+' \n'
 fl.write(t)
@@ -484,47 +483,47 @@ found = 0
 counter_write = 1
 last_number_of_atoms=-1
 while found == 0 and counter < len(po_povrsini_unique):
-	if po_povrsini_unique[counter][0] > maxstrain and maxstrain > 0:
-		found = 1
-	else:
-		if po_povrsini_unique[counter][1][3] <= maxatoms or maxatoms < 0:
-			t='  {:> 21.16f} {:> 21.16f} {:> 21.16f}'.format(a1x,a1y,a1z)+'\n'
-			strain = po_povrsini_unique[counter][0]
-			natoms = int(po_povrsini_unique[counter][1][3])
-			if last_number_of_atoms==-1:
-                           last_number_of_atoms=natoms
-			omjer1,omjer2 = po_povrsini_unique[counter][1][0:2]
-			omjer1 = int(omjer1)
-			omjer2 = int(omjer2)
-			i11,i12,i21,i22 = po_povrsini_unique[counter][1][4][0]
-			j11,j12,j21,j22 = po_povrsini_unique[counter][1][4][1]
-			writeout=1
-			if counter_write>1 and unique==1:
-                           if natoms>=last_number_of_atoms:
-                              writeout=0
-                           else:
-                              last_number_of_atoms=natoms
-                        if writeout==1:
-				t='|{:> 7d}  |  {:> 16.8f}  |  {:> 7d}  |   {:> 4d} {:> 4d}  |  {:> 4d} {:> 4d} {:> 4d} {:> 4d}  |  {:> 4d} {:> 4d} {:> 4d} {:> 4d}    |'.format(counter_write, strain, natoms, omjer1, omjer2, i11, i12, i21, i22, j11, j12, j21, j22)
-				print t
-				fl.write(t+' \n')
-				counter_write += 1
-	counter += 1
+    if po_povrsini_unique[counter][0] > maxstrain and maxstrain > 0:
+        found = 1
+    else:
+        if po_povrsini_unique[counter][1][3] <= maxatoms or maxatoms < 0:
+            t='  {:> 21.16f} {:> 21.16f} {:> 21.16f}'.format(a1x,a1y,a1z)+'\n'
+            strain = po_povrsini_unique[counter][0]
+            natoms = int(po_povrsini_unique[counter][1][3])
+            if last_number_of_atoms==-1:
+                last_number_of_atoms=natoms
+            omjer1,omjer2 = po_povrsini_unique[counter][1][0:2]
+            omjer1 = int(omjer1)
+            omjer2 = int(omjer2)
+            i11,i12,i21,i22 = po_povrsini_unique[counter][1][4][0]
+            j11,j12,j21,j22 = po_povrsini_unique[counter][1][4][1]
+            writeout=1
+            if counter_write>1 and unique==1:
+                if natoms>=last_number_of_atoms:
+                    writeout=0
+                else:
+                    last_number_of_atoms=natoms
+            if writeout==1:
+                t='|{:> 7d}  |  {:> 16.8f}  |  {:> 7d}  |   {:> 4d} {:> 4d}  |  {:> 4d} {:> 4d} {:> 4d} {:> 4d}  |  {:> 4d} {:> 4d} {:> 4d} {:> 4d}    |'.format(counter_write, strain, natoms, omjer1, omjer2, i11, i12, i21, i22, j11, j12, j21, j22)
+                print (t)
+                fl.write(t+' \n')
+                counter_write += 1
+    counter += 1
 
 
-print "-------------------------------------------------------------------------------------------------------------"
+print ("-------------------------------------------------------------------------------------------------------------")
 fl.write("-------------------------------------------------------------------------------------------------------------"+' \n')
 
-print " Done. "
-print ""
-print " To really generate cells - use the generate_cell.py script with the given results file ", output_file," and selected solution index."
+print (" Done. ")
+print ("")
+print (" To really generate cells - use the generate_cell.py script with the given results file ", output_file," and selected solution index.")
 if output_file=='results.dat':
-	print " For example python generate_cell.py 3 to get a cells defined by the third solution in the file."
+    print (" For example python generate_cell.py 3 to get a cells defined by the third solution in the file.")
 else:
-	print " For example python generate_cell.py 3 --input_file ",output_file," to get a cells defined by the third solution in the file."
-print " "
+    print (" For example python generate_cell.py 3 --input_file ",output_file," to get a cells defined by the third solution in the file.")
+print (" ")
 if counter_write == 1:
-   print "The code did not find any matching cells. Try increasing the tolerance - say 0.02, or try to rotate the first cell by some angle."
+    print ("The code did not find any matching cells. Try increasing the tolerance - say 0.02, or try to rotate the first cell by some angle.")
 
 fl.close()
 
